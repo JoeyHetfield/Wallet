@@ -17,6 +17,17 @@ class WalletForm extends Component {
             <input id="description-input" type="text" data-testid="description-input" />
           </label>
         </div>
+        <select data-testid="method-input">
+          <option>
+            Dinheiro
+          </option>
+          <option>
+            Cartão de crédito
+          </option>
+          <option>
+            Cartão de débito
+          </option>
+        </select>
       </form>
     );
   }
