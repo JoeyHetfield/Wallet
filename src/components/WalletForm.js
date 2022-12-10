@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 
 class WalletForm extends Component {
+  componentDidMount() {
+    this.callApi();
+  }
+
+  callApi = async () => {
+    const response = await fetch('https://economia.awesomeapi.com.br/json/all');
+    const data = await response.json();
+    console.log(data);
+  };
+
   render() {
     return (
       <form>
@@ -17,6 +27,9 @@ class WalletForm extends Component {
             <input id="description-input" type="text" data-testid="description-input" />
           </label>
         </div>
+        <select data-testid="currency-input">
+          teste
+        </select>
         <select data-testid="method-input">
           <option>
             Dinheiro
@@ -26,6 +39,23 @@ class WalletForm extends Component {
           </option>
           <option>
             Cartão de débito
+          </option>
+        </select>
+        <select data-testid="tag-input">
+          <option>
+            Alimentação
+          </option>
+          <option>
+            Lazer
+          </option>
+          <option>
+            Trabalho
+          </option>
+          <option>
+            Transporte
+          </option>
+          <option>
+            Saúde
           </option>
         </select>
       </form>
