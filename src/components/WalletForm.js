@@ -1,17 +1,29 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { arrayOf, func, string } from 'prop-types';
+import { userCurrency } from '../redux/actions';
 
 class WalletForm extends Component {
   componentDidMount() {
-    this.callApi();
+    this.codeApi();
   }
 
   callApi = async () => {
     const response = await fetch('https://economia.awesomeapi.com.br/json/all');
     const data = await response.json();
-    console.log(data);
+    delete data.USDT;
+    return data;
+  };
+
+  codeApi = async () => {
+    const { dispatch } = this.props;
+    const callApiConst = await this.callApi();
+    const nameMoney = (Object.keys(callApiConst));
+    dispatch(userCurrency(nameMoney));
   };
 
   render() {
+    const { currencies } = this.props;
     return (
       <form>
         <div>
@@ -28,7 +40,11 @@ class WalletForm extends Component {
           </label>
         </div>
         <select data-testid="currency-input">
-          teste
+          { currencies.map((coin) => (
+            <option key={ coin } value={ coin }>
+              { coin }
+            </option>
+          )) }
         </select>
         <select data-testid="method-input">
           <option>
@@ -63,4 +79,13 @@ class WalletForm extends Component {
   }
 }
 
-export default WalletForm;
+const mapStateToProps = (state) => ({
+  currencies: state.wallet.currencies,
+});
+
+WalletForm.propTypes = {
+  dispatch: func.isRequired,
+  currencies: arrayOf(string).isRequired,
+};
+
+export default connect(mapStateToProps)(WalletForm);
