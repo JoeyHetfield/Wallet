@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, func, string } from 'prop-types';
-import { userCurrency } from '../redux/actions';
+import { userCurrency, saveDespesa } from '../redux/actions';
 
 class WalletForm extends Component {
   state = {
@@ -20,6 +20,28 @@ class WalletForm extends Component {
     const { name, value } = target;
     this.setState({
       [name]: value,
+    });
+  };
+
+  handleClick = async () => {
+    const
+      { valueInput, descriptionInput, selectCoin, selectMethod, selectTag } = this.state;
+    const { dispatch, expenses } = this.props;
+    const exchangeFromAPi = await this.callApi();
+    // console.log(expenses);
+    const newStateExpenses = {
+      id: expenses.length,
+      value: valueInput,
+      description: descriptionInput,
+      currency: selectCoin,
+      method: selectMethod,
+      tag: selectTag,
+      exchangeRates: exchangeFromAPi,
+    };
+    dispatch(saveDespesa(newStateExpenses));
+    this.setState({
+      valueInput: '',
+      descriptionInput: '',
     });
   };
 
@@ -124,6 +146,9 @@ class WalletForm extends Component {
             Saúde
           </option>
         </select>
+        <button type="button" onClick={ this.handleClick }>
+          Adicionar despesa
+        </button>
       </form>
     );
   }
@@ -131,11 +156,13 @@ class WalletForm extends Component {
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
+  expenses: state.wallet.expenses,
 });
 
 WalletForm.propTypes = {
   dispatch: func.isRequired,
   currencies: arrayOf(string).isRequired,
+  expenses: arrayOf(string).isRequired,
 };
 
 export default connect(mapStateToProps)(WalletForm);
