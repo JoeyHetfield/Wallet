@@ -15,7 +15,7 @@ class Header extends Component {
           </p>
         </div>
         <div>
-          <h1>Despesa total: </h1>
+          <h1>Despesa total:  </h1>
           <p data-testid="total-field"> 0 </p>
           <p data-testid="header-currency-field"> BRL </p>
         </div>
