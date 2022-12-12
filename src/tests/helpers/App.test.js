@@ -44,3 +44,29 @@ describe('Componente Login', () => {
     expect(history.location.pathname).toBe('/carteira');
   });
 });
+
+describe('Componente Wallet', () => {
+  test('Se possui o texto de Despesa total', () => {
+    renderWithRouterAndRedux(<App />, { initialEntries: ['/carteira'] });
+    const despesaTotal = screen.getByRole('heading', {
+      name: /despesa total:/i,
+    });
+    expect(despesaTotal).toBeInTheDocument();
+  });
+  test('Se os inputs existem e é possivel escrever neles', () => {
+    renderWithRouterAndRedux(<App />, { initialEntries: ['/carteira'] });
+    const valorInput = screen.getByRole('textbox', {
+      name: /valor/i,
+    });
+    const descriptInput = screen.getByRole('textbox', {
+      name: /descrição da despesa/i,
+    });
+
+    expect(valorInput).toBeInTheDocument();
+    expect(descriptInput).toBeInTheDocument();
+    userEvent.type(valorInput, '2275');
+    expect(valorInput.value).toBe('2275');
+    userEvent.type(descriptInput, 'descrevendo');
+    expect(descriptInput.value).toBe('descrevendo');
+  });
+});
